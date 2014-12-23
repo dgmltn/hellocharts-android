@@ -68,6 +68,7 @@ public class LineChartRenderer extends AbstractChartRenderer {
 
 		pointPaint.setAntiAlias(true);
 		pointPaint.setStyle(Paint.Style.FILL);
+        pointPaint.setStrokeWidth(ChartUtils.dp2px(density, DEFAULT_LINE_STROKE_WIDTH_DP));
 
 		checkPrecission = ChartUtils.dp2px(density, 2);
 
@@ -371,13 +372,27 @@ public class LineChartRenderer extends AbstractChartRenderer {
 	}
 
 	private void drawPoint(Canvas canvas, Line line, PointValue pointValue, float rawX, float rawY, float pointRadius) {
-		if (ValueShape.SQUARE.equals(line.getShape())) {
-			canvas.drawRect(rawX - pointRadius, rawY - pointRadius, rawX + pointRadius, rawY + pointRadius, pointPaint);
-		} else if (ValueShape.CIRCLE.equals(line.getShape())) {
-			canvas.drawCircle(rawX, rawY, pointRadius, pointPaint);
-		} else {
-			throw new IllegalArgumentException("Invalid point shape: " + line.getShape());
-		}
+        switch (line.getShape()) {
+            case SQUARE:
+                pointPaint.setStyle(Paint.Style.FILL);
+                canvas.drawRect(rawX - pointRadius, rawY - pointRadius, rawX + pointRadius, rawY + pointRadius, pointPaint);
+                break;
+            case CIRCLE:
+                pointPaint.setStyle(Paint.Style.FILL);
+                canvas.drawCircle(rawX, rawY, pointRadius, pointPaint);
+                break;
+            case EMPTY_CIRCLE:
+                int color = pointPaint.getColor();
+                pointPaint.setColor(Color.WHITE);
+                pointPaint.setStyle(Paint.Style.FILL);
+                canvas.drawCircle(rawX, rawY, pointRadius, pointPaint);
+                pointPaint.setColor(color);
+                pointPaint.setStyle(Paint.Style.STROKE);
+                canvas.drawCircle(rawX, rawY, pointRadius, pointPaint);
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid point shape: " + line.getShape());
+        }
 	}
 
 	private void highlightPoints(Canvas canvas) {
