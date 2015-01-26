@@ -110,7 +110,7 @@ public class ComboLineColumnChartView extends AbstractChartView implements Combo
 		}
 	}
 
-	private class ComboLineChartDataProvider implements LineChartDataProvider {
+	protected class ComboLineChartDataProvider implements LineChartDataProvider {
 
 		@Override
 		public LineChartData getLineChartData() {
@@ -125,7 +125,7 @@ public class ComboLineColumnChartView extends AbstractChartView implements Combo
 
 	}
 
-	private class ComboColumnChartDataProvider implements ColumnChartDataProvider {
+	protected class ComboColumnChartDataProvider implements ColumnChartDataProvider {
 
 		@Override
 		public ColumnChartData getColumnChartData() {
